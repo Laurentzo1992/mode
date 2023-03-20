@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %} Ajout-Model {% endblock %}
+{% load crispy_forms_tags %}
+{% comment %} {% load django_bootstrap5 %} {% endcomment %}
+{% block content %}{% endblock content %}
+
+{% block main%}
+
+
+
+
+   <div class="container mt-3 w-80">
+      
+      <form method="POST" style="font-size: 14px; background-color: #E6E6FA" class="card p-3 mt-5" {% block action %} action="{% url 'add_modelle' %}" {% endblock action %} autocomplete="off" enctype="multipart/form-data"> 
+            {% csrf_token %}
+
+            {% comment %} {% bootstrap_form form %} {% endcomment %}
+
+         <div class="row">
+            {{form.libelle|as_crispy_field}}
+         </div>
+
+         <div class="mt-4" style="width: 100p%;">
+            <button style= "font-size: 15px;" type="submit" class="btn btn-success mb-3">
+            <i class="fas fa-plus"></i>&nbsp;&nbsp; Ajouter
+            </button>
+            <a style= "font-size: 15px;" href="{% url 'modelle' %}" type="button" class="btn btn-outline-danger mb-3 ms-2" style="wdith: 50px;" title="Close">
+                  <i class="fas fa-times"></i>
+            </a>
+         </div> 
+          
+      </form>
+   </div>
+
+{% endblock main%}
+
+
+{% block footer %}{% endblock footer %}

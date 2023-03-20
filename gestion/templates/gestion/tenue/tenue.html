@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %} Liste-tenue {% endblock %}
+
+{% block content %}{% endblock content %}
+
+
+{% block add %}
+<a href="{% url 'add_tenue' %}" title="Ajouter une tenue">
+  <i class="fa-solid fa-user-plus ms-5"></i>
+<a/>
+{% endblock add %}
+
+{% block main %}
+<div class="container w-50">
+    <table id="example" class="table table-striped" style="width:100%">
+        <thead class="table-success">
+            <tr>
+                <th>ID</th>
+                <th>Nom tenue</th>
+                <th>Prix</th>
+                <th>Model</th>
+                <th style="width: 18%;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tenue in tenues %}
+            <tr>
+                <td>{{tenue.id}}</td>
+                <td>{{tenue.libelle}}</td>
+                <td>{{tenue.price}}</td>
+                <td>{{tenue.model}}</td>
+                <td>
+                    <a href="{% url 'edit_tenue' tenue.id %}" type="button" class="btn btn-warning" title="Edit Tenue">
+                        <i class="fas fa-pen"></i>
+                    </a>
+                    <a href="{% url 'delete_tenue' tenue.id %}" type="button" class="btn btn-danger" title="Edit Tenue">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+                {% for message in messages %}
+                        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+                        {% if message.tags == 'error' %}
+                            <script>
+                                var m = "{{ message }}";
+                                  swal("Denied !", "Enter your data correctly.", "error")
+                            </script>
+                                  {% elif message.tags == 'success' %}
+                            <script>
+                                  var m = "{{ message }}";
+                                  swal("Perfect !", m, "success")
+                            </script>
+                        {% endif %}   
+                {% endfor%}
+{% endblock main %}
+
+{% block footer %}{% endblock footer %}

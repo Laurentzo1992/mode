@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %} Liste-Model {% endblock %}
+
+{% block content %}{% endblock content %}
+
+
+{% block add %}
+<a href="{% url 'add_modelle' %}" title="Ajouter un model">
+  <i class="fa-solid fa-user-plus ms-5"></i>
+<a/>
+{% endblock add %}
+
+{% block main %}
+<div class="container mt-3 w-50">
+    <table id="example" class="table table-striped" style="width:100%">
+        <thead class="table-success">
+            <tr>
+                <th>Id</th>
+                <th>Model</th>
+                <th style="width: 18%;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for modelle in modelles %}
+            <tr>
+                <td>{{modelle.id}}</td>
+                <td>{{modelle.libelle}}</td>
+                <td>
+                    <a href="{% url 'edit_modelle' modelle.id %}" type="button" class="btn btn-warning" title="Edit Tenue">
+                        <i class="fas fa-pen"></i>
+                    </a>
+                    <a href="{% url 'delete_modelle' modelle.id %}" type="button" class="btn btn-danger" title="Edit Tenue">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+                {% for message in messages %}
+                        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+                        {% if message.tags == 'error' %}
+                            <script>
+                                var m = "{{ message }}";
+                                  swal("Denied !", "Enter your data correctly.", "error")
+                            </script>
+                                  {% elif message.tags == 'success' %}
+                            <script>
+                                  var m = "{{ message }}";
+                                  swal("Perfect !", m, "success")
+                            </script>
+                        {% endif %}   
+                {% endfor%}
+{% endblock main %}
+
+{% block footer %}{% endblock footer %}

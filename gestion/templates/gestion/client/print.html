@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} impression-client {% endblock %}
+
+
+{% block nav %}{% endblock nav %}
+
+
+{% block main%}
+
+<div class="d-flex flex-row align-items-center align-content-center">
+    <div class="row d-flex flex-row align-items-center">
+        <img src="{% static 'images/app_img/LogoBf.png' %}" class="w-25 h-25">
+    </div>
+    <div class="row d-flex flex-row align-items-center">
+        <h4 class="font-italic font-weight-bold text-primary">LIM'S PRESTATION </h4>
+    </div>
+</div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="bg-primary border-0">Information personnelle</th> 
+                <th class="bg-primary border-0">Mesures tenues</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                        <table class="table table-striped
+                        table-hover	
+                        table-borderless
+                        align-middle">
+                                    <tr>
+                                        <td>Nom : {{client.nom}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Prenom : {{client.prenom}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Telephone : {{client.telephone}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ville : {{client.ville}}</td>
+                                    </tr>
+                        </table>
+                </td>
+                <td>
+                        <table class="table table-striped
+                        table-hover	
+                        table-borderless
+                        align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                    <tr>
+                                        <td>Bas : {{client.bas}}</td>
+                                        <td>Longueur Pantalon : {{client.longpan}}</td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td>Poignet : {{client.poignet}}</td>
+                                        <td>Long jupe : {{client.longjupe}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Genou : {{client.genou}}</td>
+                                        <td>Cuisse : {{client.cuiss}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bassin : {{client.bassin}}</td>
+                                        <td>Cienture : {{client.ceinture}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Long chemise : {{client.longchem}}</td>
+                                        <td>Frappe : {{client.frappe}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Long robe : {{client.longrobe}}</td>
+                                        <td>Long camisole : {{client.longcami}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pince : {{client.pince}}</td>
+                                        <td>Tour taille : {{client.tourtaille}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Colle : {{client.coole}}</td>
+                                        <td>Long taille : {{client.longtaille}}</td>
+                                    </tr><tr>
+                                        <td>Tour manche : {{client.tourmanch}}</td>
+                                        <td>Long manche : {{client.longmanch}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Poitrine : {{client.poitrine}}</td>
+                                        <td>Dos : {{client.dos}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Epaul : {{client.epaul}}</td>
+                                        <td>Carure avant : {{client.avcar}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Carure arrière : {{client.arcar}}</td>
+                                    </tr>
+                                </tbody>
+                        </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+{% endblock main%}
+
+
+{% block footer %}
+
+{% endblock footer %}
