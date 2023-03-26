@@ -1,5 +1,5 @@
 from django import forms
-from gestion.models import Client, Tenue, ModelTenue, Command, Livraison, Ville
+from gestion.models import Client, Tenue, ModelTenue, Command, Livraison, Ville, Post, Couturier
 from django.core.validators import RegexValidator
 
 
@@ -85,4 +85,40 @@ class ModelTenueForm(forms.ModelForm):
         model = ModelTenue
         fields = '__all__'
         
+
+
+class PostForm(forms.ModelForm):
+    
+    libelle = forms.CharField(
+        label='Post',
+        widget=forms.TextInput(attrs={'placeholder': 'Post'})
+    )
+    
+    class  Meta:
+        model = Post
+        fields = '__all__'
         
+        
+        
+class CouturierForm(forms.ModelForm):
+    
+    class  Meta:
+        model = Couturier
+        fields = '__all__'
+        
+        
+        
+        
+class LivraisonForm(forms.ModelForm):
+    date_livaison = forms.DateField(
+        label='Date de livraison',
+        widget=forms.TextInput(attrs={'type': 'date'})
+    )
+    class Meta:
+        model = Livraison
+        fields = '__all__'
+        
+        widgets = {
+            'commande': forms.HiddenInput(),
+        }
+         

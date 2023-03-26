@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %} Liste-commande {% endblock %}
+
+{% block content %}{% endblock content %}
+
+
+{% block add %}
+&nbsp;<span class="badge bg-danger">{{nbr_commande}}</span>
+<a href="{% url 'add_commande' %}" title="Ajouter une commande">
+<i class="fa-solid fa-user-plus ms-5"></i>
+<a/>
+
+{% endblock add %}
+
+{% block main %}
+<div class="container w-75">
+   
+    <table id="example" class="table table-striped" style="width:100%">
+        <thead class="table-success">
+            <tr>
+                <th>Numero commande</th>
+                <th>Client</th>
+                <th>Date commande</th>
+                <th style="width: 18%;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for commande in commandes %}
+            <tr>
+                <td>{{commande.num_commande}}</td>
+                <td>{{commande.client}}</td>
+                <td>{{commande.date_commande}}</td>
+                <td>
+                    <a href="{% url 'edit_commande' commande.id %}" type="button" class="btn btn-warning" title="Edit Client">
+                        <i class="fas fa-pen"></i>
+                    </a>
+                    <a href="{% url 'delete_commande' commande.id %}" type="button" class="btn btn-danger" title="Delete Client">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                    <a href="{% url 'items_commande' commande.id %}" type="button" class="btn btn-primary" title="Delete Client" target="_blank">
+                        <i class="fas fa-print"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+                {% for message in messages %}
+                        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+                        {% if message.tags == 'error' %}
+                            <script>
+                                var m = "{{ message }}";
+                                  swal("Denied !", "Enter your data correctly.", "error")
+                            </script>
+                                  {% elif message.tags == 'success' %}
+                            <script>
+                                  var m = "{{ message }}";
+                                  swal("Perfect !", m, "success")
+                            </script>
+                        {% endif %}   
+                {% endfor%}
+
+{% endblock main %}
+
+
+{% block footer %}{% endblock footer %}

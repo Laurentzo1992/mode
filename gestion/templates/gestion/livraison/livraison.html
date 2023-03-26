@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %} Liste-livraison {% endblock %}
+
+{% block content %}{% endblock content %}
+
+
+{% block add %}
+&nbsp;<span class="badge bg-danger">{{nbr_livraison}}</span>
+{% endblock add %}
+
+{% block main %}
+
+
+<div class="container w-75">
+   
+    <table id="example" class="table table-striped" style="width:100%">
+        <thead class="table-success">
+            <tr>
+                <th>Numero commande</th>
+                <th>Client</th>
+                <th>Date commande</th>
+                <th>Etat</th>
+                <th style="width: 18%;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for livraison in page_obj %}
+            <tr>
+                <td>{{livraison.num_livraison}}</td>
+                <td>{{livraison.commande.client}}</td>
+                <td>{{livraison.commande.date_commande}}</td>
+                {% if livraison.status is False %}
+                <td class="text-danger font-weight-bold"><i style="font-size: 15px;" class="fa-solid fa-circle"></i> &nbsp;&nbsp;En cours</td>
+                {% endif %}
+                <td>
+                    <a href="{% url 'valide_livraison' livraison.id %}" type="button" class="btn btn-success" title="Valide Livraison">
+                        <i class="fas fa-check text-white"></i>
+                    </a>
+                    {% if livraison.status is True %}
+                    <a href="" type="button" class="btn btn-primary" title="Delete Client" target="_blank">
+                        <i class="fas fa-print"></i>
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+                {% for message in messages %}
+                        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+                        {% if message.tags == 'error' %}
+                            <script>
+                                var m = "{{ message }}";
+                                  swal("Denied !", "Enter your data correctly.", "error")
+                            </script>
+                                  {% elif message.tags == 'success' %}
+                            <script>
+                                  var m = "{{ message }}";
+                                  swal("Perfect !", m, "success")
+                            </script>
+                        {% endif %}   
+                {% endfor%}
+
+{% endblock main %}
+
+
+{% block footer %}{% endblock footer %}

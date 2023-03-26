@@ -75,7 +75,7 @@ class Client(models.Model):
     modified_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return self.nom
+        return f'{self.nom} {self.prenom}'
     
     @property
     def fileURL(self):
@@ -85,55 +85,74 @@ class Client(models.Model):
             url = ''
         return url
     
+    
+class Post(models.Model):
+    
+    libelle = models.CharField(max_length=100, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.libelle
+    
+      
 # Model Couturier    
 class Couturier(models.Model):
     
     SPECIALITE = (
-        ('FEMME', 'Femme'),
-        ('HOMME', 'Homme'),
+        ('Femme', 'Femme'),
+        ('Homme', 'Homme'),
+        ('Mixte', 'Mixte'),
     )
-    client_id = models.ForeignKey(Client, on_delete=models.CASCADE, null=True, blank=True)
+    nom = models.CharField(max_length=100, null=True)
+    prenom = models.CharField(max_length=100, null=True)
     num_cnib = models.CharField(max_length=100, null=True)
-    specialite = models.CharField(max_length=100, null=True, choices=SPECIALITE)
+    post = models.ForeignKey(Post, null=True, blank=True, on_delete=models.CASCADE)
+    specialite = models.CharField(max_length=100, null=True, blank=True, choices=SPECIALITE)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return self.num_cnib
     
+    
 # Model Command   
 class Command(models.Model):
     
-    ETAT = (
-        ('FINIS', 'Finis'),
-        ('ENCOURS', 'En cous'),
-    )
-    client_id = models.ForeignKey(Client, on_delete=models.CASCADE, null=True, blank=True)
-    couturier_id = models.ForeignKey(Couturier, on_delete=models.CASCADE, null=True, blank=True)
-    date_command = models.DateField()
-    transaction_id = models.CharField(max_length=100, null=True)
+    num_commande = models.CharField(unique=True, max_length=100, null=True, blank=True)
+    articles = models.ManyToManyField(Tenue, through='LigneCommande')
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, null=True, blank=True)
+    couturier = models.ForeignKey(Couturier, on_delete=models.CASCADE, null=True, blank=True)
+    adresse_livraison = models.CharField(max_length=100, null=True, blank=True)
+    date_commande = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now_add=True)
-    etat = models.CharField(max_length=100, null=True, choices=ETAT)
     
     def __str__(self):
-        return self.id
+        return self.num_commande
+    
+    
+class LigneCommande(models.Model):
+    article = models.ForeignKey(Tenue, null=True, blank=True, on_delete=models.CASCADE)
+    commande = models.ForeignKey(Command, null=True, blank=True, on_delete=models.CASCADE)
+    quantite = models.PositiveIntegerField()
+    create_at = models.DateField(auto_now_add=True, null=True, blank=True)
+    modified_at = models.DateTimeField(auto_now_add=True)
+  
+    
+
   # Model Livraison   
 class Livraison(models.Model):
     
-    ETAT = (
-        ('LIVRE', 'livre'),
-        ('NON_LIVRE', 'Non libre'),
-    )
-    
-    comand_id = models.ForeignKey(Command, on_delete=models.CASCADE, null=True, blank=True)
-    date_livraison = models.DateField()
+    num_livraison = models.CharField(unique=True, max_length=100, null=True, blank=True)
+    commande = models.ForeignKey(Command, on_delete=models.CASCADE, null=True, blank=True)
+    date_livaison = models.DateField(null=True, blank=True)
     status = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return self.comand_id
+        return self.num_livraison
     
 
     

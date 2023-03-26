@@ -22,4 +22,31 @@ urlpatterns = [
     path('modelle/add/', views.add_modelle, name='add_modelle'),
     path('modelle/edit/<int:id>', views.edit_modelle, name='edit_modelle'),
     path('modelle/delete/<int:id>', views.delete_modelle, name='delete_modelle'),
+    
+    
+    path('post', views.post, name='post'),
+    path('post/add/', views.add_post, name='add_post'),
+    path('post/edit/<int:id>', views.edit_post, name='edit_post'),
+    path('post/delete/<int:id>', views.delete_post, name='delete_post'),
+    
+    
+    
+    path('personnel', views.personnel, name='personnel'),
+    path('personnel/add/', views.add_personnel, name='add_personnel'),
+    path('personnel/edit/<int:id>', views.edit_personnel, name='edit_personnel'),
+    path('personnel/delete/<int:id>', views.delete_personnel, name='delete_personnel'),
+    
+    
+    path('commande', views.commande, name='commande'),
+    path('commande/add/', views.add_commande, name='add_commande'),
+    path('commande/edit/<int:commande_id>', views.edit_commande, name='edit_commande'),
+    path('commande/delete/<int:id>', views.delete_commande, name='delete_commande'),
+    path('commande/items/<int:id>', views.items_commande, name='items_commande'),
+    
+    
+    path('livraison', views.livraison, name='livraison'), 
+    path('livraison/bon/<int:id>', views.bon_livraison, name='bon_livraison'),
+    path('livraison/valide_livraison/<int:id>', views.valide_livraison, name='valide_livraison'),
+     
+    
 ]

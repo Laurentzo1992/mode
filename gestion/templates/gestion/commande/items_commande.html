@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %} Ajout-commande {% endblock %}
+{% block nav %}{% endblock nav %}
+{% block main %}
+
+
+<div class="container">
+    <h5 class="font-italic font-weight-bold">Commande</h5>
+        <div class="row mt-2 mb-1 p-1">
+            <div class="col-6 shadow-lg">
+                {% csrf_token %}
+
+                <div class="col-12 p-1 mt-1 text-info font-weight-bold font-italic d-flex flex-column">
+                    <label for="num_commande"> Numero commande </label>
+                    <input required name="num_commande" type="text" value="{{com_id.num_commande}}" class="form-control" id="num_commande" readonly>
+                </div>
+                <div class="col-12 p-1 mt-1 text-info font-weight-bold font-italic d-flex flex-column">
+                    <label for="adresse_livraison"> Adresse de livraison</label>
+                    <input required name="adresse_livraison" value="{{com_id.adresse_livraison}}" type="text" class="form-control" readonly>
+                </div>
+                <div class="col-12 p-1 mt-1 text-info font-weight-bold font-italic d-flex flex-column">
+                    <label for="date_commande"> Date de commande</label>
+                    <input required name="date_commande" value="{{com_id.date_commande}}" type="text" class="form-control" readonly>
+                </div>
+
+                <div class="col-12 p-1 mt-1 text-info font-weight-bold font-italic d-flex flex-column">
+                    <label for="client"> Client </label>
+                    <input required name="date_commande" value="{{com_id.client}}" type="text" class="form-control" readonly>
+                </div>
+
+
+                <div class="col-12 p-1 mt-1 text-info font-weight-bold font-italic d-flex flex-column">
+                    <label for="couturier"> Couturier </label>
+                    <input required name="date_commande" value="{{com_id.couturier.nom}}--{{com_id.couturier.prenom}}" type="text" class="form-control" readonly>
+                </div>
+            </div>
+
+            <div class="col-6 shadow-lg">
+                {% for commande in commandes %}
+                <div id="wrapper">
+                    <div class="ligne row p-1 mt-1 text-info font-weight-bold font-italic" id="ligne">
+                        <div class="col-6  p-1">
+                            <label for="article-1">Tenues</label>
+                            <input required name="articles" value="{{commande.article}}" type="text" class="form-control" readonly>
+                        </div>
+                        <div class="col-6 p-1 text-info font-weight-bold font-italic">
+                            <label for="qty-1"> Quantité</label>
+                            <input required name="quantity-1" value="{{commande.quantite}}" type="number" class="form-control" readonly>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+</div>
+
+
+{% endblock main %}
+
+
+{% block footer %}{% endblock footer %}
+
+
+
+
+

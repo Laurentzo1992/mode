@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% block title %} Ajout-commande {% endblock %}
+{% block main %}
+
+<div class="container">
+    <div class="float-sm-end">
+        <button id="btn-add" style= "font-size: 15px;" class="btn btn-primary">
+            <i class="fas fa-plus"></i>
+        </button>
+
+        <button id="btn-remove" style= "font-size: 15px;" class="btn btn-danger">
+            <i class="fas fa-minus"></i>
+        </button>
+        <a href="{% url 'edit_commande' commande.id %}" style= "font-size: 15px;" class="btn btn-warning">
+            <i class="fas fa-refresh"></i>
+        </a>
+        <a href="{% url 'commande' %}" style= "font-size: 15px;" class="btn btn-success">
+            <i class="fas fa-close"></i>
+        </a>
+    </div>
+    <form class="myform" method="post">
+        <div class="row mt-2 mb-1 p-1">
+            <div class="col-6 shadow-lg">
+                {% csrf_token %}
+
+                <div class="col-12 p-1 mt-1 text-info font-weight-bold font-italic d-flex flex-column">
+                    <label for="num_commande"> Numero commande </label>
+                    <input required name="num_commande" type="text" value="{{commande.num_commande}}" min="1" step="0.1" class="form-control" id="num_commande" readonly>
+                </div>
+                <div class="col-12 p-1 mt-1 text-info font-weight-bold font-italic d-flex flex-column">
+                    <label for="adresse_livraison"> Adresse de livraison</label>
+                    <input required name="adresse_livraison"  value="{{commande.adresse_livraison}}" type="text" min="1" step="0.1" class="form-control" id="adresse_livraison">
+                </div>
+                <div class="col-12 p-1 mt-1 text-info font-weight-bold font-italic d-flex flex-column">
+                    <label for="date_commande"> Date de commande</label>
+                    <input required name="date_commande" value="{{commande.date_commande|date:'Y-m-d'}}" type="date" min="1" step="0.1" class="form-control" id="date_commande">
+                </div>
+
+                <div class="col-12 p-1 mt-1 text-info font-weight-bold font-italic d-flex flex-column">
+                    <label for="client"> Client </label>
+                    <select name="client" class="form-control" id="client">
+                        <option value="{{commande.client.id}}">{{commande.client}}</option>
+                        {% for client in suppliers %}
+                        <option value="{{client.id}}">{{forloop.counter}}-{{client.nom}} {{client.prenom}} {{client.telephone}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+                <div class="col-12 p-1 mt-1 text-info font-weight-bold font-italic d-flex flex-column">
+                    <label for="couturier"> Couturier </label>
+                    <select name="couturier" class="form-control" id="couturier">
+                        <option value="{{commande.couturier.id}}">{{commande.couturier.nom}}{{commande.couturier.prenom}}</option>
+                        {% for couturier in couturiers %}
+                        <option value="{{couturier.id}}">{{forloop.counter}}-{{couturier.nom}} {{couturier.prenom}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mt-2">
+                <button style= "font-size: 15px;" type="submit" class="btn btn-info mb-3">
+                        <i class="fas fa-plus"></i>&nbsp;&nbsp; <i class="fa-solid fa-floppy-disk"></i>
+                </button>
+                </div>
+            </div>
+
+            <div class="col-6 shadow-lg">
+                {% for commande in commandes %}
+                <div id="wrapper">
+                    <div class="ligne row p-1 mt-1 text-info font-weight-bold font-italic" id="ligne">
+                        <div class="col-6  p-1">
+                            <label for="article-1">Tenues</label>
+                            <select name="articles" class="form-control" id="article-1">
+                                <option value="{{commande.article.id}}">{{commande.article}}</option>
+                                {% for article in articles %}
+                                <option value="{{article.id}}">{{forloop.counter}}-{{article.libelle}}-{{article.model}}-{{article.price}} FCFA</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-6 p-1 text-info font-weight-bold font-italic">
+                            <label for="qty-{{commande.article.id}}"> Quantité</label>
+                            <input required name="quantity-{{commande.article.id}}" value="{{commande.quantite}}" type="number" min="1" step="0.1" class="form-control" id="qty-1">
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </form> 
+</div>
+
+
+<script type="text/javascript">
+
+    // click to add new line item 
+    
+    $(document).on('click', '#btn-add', function(){
+        
+        var number = $('#wrapper').children().length + 1;
+        console.log(number);
+        let formAdd = `
+
+                        <div class="ligne row p-1 mt-1 text-info font-weight-bold font-italic" id="ligne">
+                            <div class="col-6  p-1">
+                                <label for="article-${number}">Article</label>
+                                <select name="articles" class="form-control" id="article-${number}">
+                                    <option> Choisir ... </option>
+                                    {% for article in articles %}
+                                    <option value="{{article.id}}">{{forloop.counter}}-{{article.libelle}}-{{article.model}}-{{article.price}} FCFA</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6 p-1 text-info font-weight-bold font-italic">
+                                <label for="qty-${number}"> Quantité</label>
+                                <input required name="quantity-${number}" type="number" min="1" step="0.1" class="form-control" id="qty-${number}">
+                    
+                            </div>
+                        </div>
+
+
+                    `;   
+                    
+        
+        $("#wrapper:last").append(formAdd);          
+    })
+    
+    
+    // Remove last item line 
+    
+    $(document).on('click', '#btn-remove', function(){
+        $("#wrapper").children().last().remove();
+    })
+
+    {% comment %} // compute defferent totals 12
+
+    function handleChangeSingleArticle(id){
+
+        console.log(id.toString().split('-'))
+        let articleId = id.split('-')[1];
+
+        let idQty = `#qty-${articleId}`;
+
+        let unitId = `#unit-${articleId}`;
+
+        let totalIdLine = `#total-a-${articleId}`;
+
+        let totalLine = parseFloat($(idQty).val()) * parseFloat($(unitId).val());
+
+        $(totalIdLine).val(totalLine);
+
+        $('#total').val(parseFloat($('#total').val()) + totalLine);
+        
+    } {% endcomment %}
+
+// TODO This code is not completed you need to add a busness logic for changing in quantity and removving the last item line.    
+    
+</script>
+
+{% endblock main %}
+
+
+
+
+
