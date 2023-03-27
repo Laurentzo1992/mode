@@ -2,48 +2,8 @@
 {% block title %} Home {% endblock %}
                 {% block main %} 
 					<main>
-	
-						<div class="cards">
-	
-							<div class="card-single">
-								<div>
-									<h2>{{cl}}</h2>
-									<small>Nombre de client</small>
-								</div>
-								<div>
-									<span class="fa-solid fa-file-signature"></span>
-								</div>
-							</div>
-							<div class="card-single">
-								<div>
-									<h2>{{ml}}</h2>
-									<small>Models</small>
-								</div>
-								<div>
-									<span class="fa-solid fa-people-arrows"></span>
-								</div>
-							</div>
-							<div class="card-single">
-								<div>
-									<h2>{{tn}}</h2>
-									<small>Tenues</small>
-								</div>
-								<div>
-									<span class="fa-solid fa-outdent"></span>
-								</div>
-							</div>
-							<div class="card-single">
-								<div>
-									<h2>{{cm}}</h2>
-									<small>Commandes</small>
-								</div>
-								<div>
-								<span class="fa-solid fa-users"></span>
-								</div>
-							</div>
-						</div>
-						<div class="row mt-4">
-							{% for tenu in tenues %}
+						<div class="row mt-1">
+							{% for tenu in page_obj %}
 							<div class="col-3">
 								<div class="card">
 									<img src="{{tenu.imageURL}}" class="card-img-top" alt="{{tenu.libelle}}">

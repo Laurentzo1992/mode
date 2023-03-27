@@ -31,13 +31,13 @@
                 <td>{{commande.client}}</td>
                 <td>{{commande.date_commande}}</td>
                 <td>
-                    <a href="{% url 'edit_commande' commande.id %}" type="button" class="btn btn-warning" title="Edit Client">
+                    <a href="{% url 'edit_commande' commande.id %}" type="button" class="btn btn-warning" title="Edit commande" readonly>
                         <i class="fas fa-pen"></i>
                     </a>
-                    <a href="{% url 'delete_commande' commande.id %}" type="button" class="btn btn-danger" title="Delete Client">
+                    <a href="{% url 'delete_commande' commande.id %}" type="button" class="btn btn-danger" title="Delete commande">
                         <i class="fas fa-trash"></i>
                     </a>
-                    <a href="{% url 'items_commande' commande.id %}" type="button" class="btn btn-primary" title="Delete Client" target="_blank">
+                    <a href="{% url 'items_commande' commande.id %}" type="button" class="btn btn-primary" title="Delete commande" target="_blank">
                         <i class="fas fa-print"></i>
                     </a>
                 </td>

@@ -12,7 +12,6 @@
 
 {% block main %}
 <div class="container w-75">
-   
     <table id="example" class="table table-striped" style="width:100%">
         <thead class="table-success">
             <tr>
@@ -31,7 +30,13 @@
                 <td>{{client.prenom}}</td>
                 <td>{{client.telephone}}</td>
                 <td>{{client.ville}}</td>
-                <td>{{client.ville}}</td>
+                <td>
+                    {% if client.fileURL %}
+                    <a href ="{{client.fileURL}}" title="Lire le fichier" target="_blank">
+                        <i style="font-size: 25px; color: green; text-decoration-style: none;" class="fa-solid fa-file-pdf"></i>
+                    </a>
+                    {% endif %}
+                </td>
                 <td>
                     <a href="{% url 'edit_client' client.id %}" type="button" class="btn btn-warning" title="Edit Client">
                         <i class="fas fa-pen"></i>

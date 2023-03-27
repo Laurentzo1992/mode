@@ -8,7 +8,6 @@
 }
 
 main {
-    margin-top: 80px;
     background-color: #ebf6ff;
     padding: 2rem 1.5rem;
     min-height: calc(100vh);
@@ -39,23 +38,12 @@ main {
 }
 
 .card-single small {
-    color: grey;
+    color: rgb(192, 8, 8);
 }
 
 .card-single:hover {
     background-color: #008ea1;
     color: #fff;
-}
-
-.btn {
-    background-color: #008ea1;
-    border-radius: 2px;
-    color: #fff;
-    font-size: .3rem;
-    border: none;
-    cursor: pointer;
-    margin-bottom: 1rem;
-    margin-left: 5px;
 }
 
 @media only screen and (max-width: 960px) {

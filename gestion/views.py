@@ -1,19 +1,57 @@
 from multiprocessing import context
 from django.shortcuts import get_object_or_404, render, redirect
 from django.core.paginator import Paginator
-from urllib import request, response
-from django.http import JsonResponse, HttpResponseRedirect
 from  django.contrib import messages
-from .forms import ClientForm, LivraisonForm, VilleForm, ModelTenueForm, TenueForm, PostForm, CouturierForm
+from .forms import ClientForm, VilleForm, ModelTenueForm, TenueForm, PostForm, CouturierForm
 from gestion.models import Client, Couturier, LigneCommande, Tenue, ModelTenue, Ville, Command, Livraison, Post
 from django.contrib.auth.decorators import login_required, permission_required
 from  django.views.decorators.cache import cache_control 
-from datetime import date
+from datetime import date, datetime
 from django.db import transaction, models
+from django.db.models import Count, Sum
+
+
+############################################################################
+
+#Statistic
+
+def statistique(request):
+    #AfficRécupéré le nombre des éléments 
+    cl = Client.objects.count()
+    ml = ModelTenue.objects.count()
+    tn = Tenue.objects.count()
+    cm = Command.objects.count()
+
+    #recupérez les date selectionnées depuis le template
+    date_depart = request.GET.get('date_depart')
+    date_arrive = request.GET.get('date_arrive')
+    #Verifie si les dates ont été bien récupéré
+    if date_depart and date_arrive:
+        #on fait le filtre
+        etats1 = Command.objects.filter(date_commande__range=[date_depart, date_arrive]).values('client__telephone', 'client__nom', 'client__prenom').annotate(total=Count('client'))
+        etats = LigneCommande.objects.filter(commande__in=Command.objects.all(), commande__date_commande__range=[date_depart, date_arrive]).values('article__libelle').annotate(total=Count('article'), quantite=Sum('quantite'))
+    else:
+        # si non retourne les éléments sans filtre
+        etats1 = Command.objects.all().values('client__telephone', 'client__nom', 'client__prenom').annotate(total=Count('client'))
+        etats = LigneCommande.objects.filter(commande__in=Command.objects.all()).values('article__libelle').annotate(total=Count('article'), quantite=Sum('quantite'))
+    # on compte le nombre de ligne retournées pour dynamiser le graphique
+    barres = etats.count()
+    barres1 = etats1.count()
+    # on selectionne et on compte le nombre de produit disponible dans la base
+    articles = Tenue.objects.all().count()
+    # on selectionne et on compte le nombre de commande passées disponible dans la base
+    articles_commandes = Command.objects.all().count()
+    # on selectionne et on compte le nombre de commande livré disponible dans la base
+    articles_livres = Livraison.objects.filter(status=True).count()
+    context={"cl":cl, "ml":ml, "tn":tn, "cm":cm, "date_depart":date_depart, "date_arrive":date_arrive, "barres1":barres1, "etats1":etats1, "barres":barres, "etats":etats, "articles":articles, "articles_commandes":articles_commandes, "articles_livres":articles_livres}
+    # on reinitialise le filtre
+    if 'reset' in request.GET:
+        return redirect('statistique')
+    return render(request, 'gestion/statistique/statistique.html', context)
+
 ############################################################################
 
 #Zone to manage Client
-
 
 def client(request):
     clients = Client.objects.all()
@@ -469,18 +507,15 @@ def delete_commande(request, id):
     return render(request, 'gestion/commande/delete.html', {"com_id":com_id, "commandes":commandes})
 
 
+
 def valide_livraison(request, id):
     livraison = get_object_or_404(Livraison, id=id)
-    commande = livraison.commande
-    form = LivraisonForm(request.POST or None, instance=livraison)
-    if form.is_valid():
-        livraison = form.save(commit=False)
-        commande.save()
-        livraison.status = True
-        livraison.save()
-        messages.success(request, 'commande livréé avec succès!')
-        return redirect('livraison')
-    return render(request, 'gestion/livraison/livraison.html', {'form': form, 'livraison': livraison})
+    livraison.date_livaison = date.today()
+    livraison.status = True
+    # Mettre à jour les autres informations de livraison ici
+    livraison.save()
+    messages.success(request, 'La livraison a été mise à jour avec succès')
+    return redirect('livraison')
 
 
 def items_commande(request, id):
@@ -491,13 +526,17 @@ def items_commande(request, id):
 
 
 def bon_livraison(request, id):
-    com_id = Livraison.objects.get(id=id)
-    commandes=LigneCommande.objects.filter(commande_id=com_id)
-    return render(request, 'gestion/commande/bon_livraison.html', {"com_id":com_id, "commandes":commandes})
+    liv_id = Livraison.objects.get(id=id)
+    com_id = liv_id.id
+    ma_commande = get_object_or_404(Command, id=com_id)
+    article_commandes = LigneCommande.objects.filter(commande=ma_commande)
+    nbr_items = article_commandes.count()
+    context={"article_commandes":article_commandes, "ma_commande":ma_commande, "nbr_items":nbr_items}
+    return render(request, 'gestion/livraison/bon_livraison.html', context)
 
 
 def livraison(request):
-    livraisons = Livraison.objects.all().filter(status=False).order_by('-id')
+    livraisons = Livraison.objects.all().order_by('-id')
     nbr_livraison = livraisons.count()
     paginator = Paginator(livraisons, 10)
     page_number = request.GET.get('page')

@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block title %} impression-client {% endblock %}
+
+
+{% block nav %}{% endblock nav %}
+
+
+{% block main%}
+
+<div class="d-flex flex-row align-items-center align-content-center">
+    <div class="row d-flex flex-row align-items-center">
+        <img src="{% static 'images/app_img/LogoBf.png' %}" class="w-25 h-25">
+    </div>
+    <div class="row d-flex flex-row align-items-center">
+        <h4 class="font-italic font-weight-bold text-primary">LIM'S PRESTATION </h4>
+    </div>
+</div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="bg-primary border-0" style="width:45%;">Commande numero : {{ma_commande}}</th> 
+                <th class="bg-primary border-0">Nombre d'items commandés : {{nbr_items}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                        <table class="table table-striped
+                        table-hover	
+                        table-borderless
+                        align-middle">
+                                    <tr>
+                                        <td>Nom  : {{ma_commande.client.nom}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Prenom  : {{ma_commande.client.prenom}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Telephone  : {{ma_commande.client.telephone}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ville : {{ma_commande.client.ville.libelle}}</td>
+                                    </tr>
+                        </table>
+                </td>
+                <td>
+                        <table class="table table-striped
+                        table-hover	
+                        table-borderless
+                        align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Items</th>
+                                    <th>Quantités</th>
+                                </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                    {% for article_commande in article_commandes %}
+                                    <tr>
+                                        <td>{{article_commande.article}}</td>
+                                        <td>{{article_commande.quantite}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                        </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+{% endblock main%}
+
+
+{% block footer %}
+
+{% endblock footer %}
+

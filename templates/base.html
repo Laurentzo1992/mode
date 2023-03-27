@@ -23,9 +23,16 @@
     	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     	  <!-- CSS Datatables -->
 		    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jq-3.6.0/jszip-2.5.0/dt-1.12.1/b-2.2.3/b-html5-2.2.3/b-print-2.2.3/datatables.min.css"/>
+        <!-- Chart js  -->
+        <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
+  
         </head>
     <body>
 
+       <!--       **********  nav zone      **************              -->
     {% block nav %}
         <nav class="navbar navbar-expand-lg navbar-light sticky-top" style="background-color: #048B9A;">
             <div class="container-fluid">
@@ -36,46 +43,48 @@
               <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Boutique</a>
+                    <a class="nav-link active" aria-current="page" href="{% url 'statistique' %}"><i class="fa fa-dashboard text-white">&nbsp;dashboard</i></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active text-white" aria-current="page" href="{% url 'home' %}"><i class="fa fa-house text-warning">&nbsp;</i>Boutique</a>
                   </li>
 
                   <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       Gestion Client
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-                      <li><a class="dropdown-item" href="{% url 'client' %}">Mesure client</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="{% url 'tenue' %}">Tenues</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="{% url 'modelle' %}">Models</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="{% url 'ville' %}">Ville</a></li>
+                      <li><a class="dropdown-item text-primary" href="{% url 'client' %}">Mesure client</a></li>
+                      <li><hr class="dropdown-divider text-primary"></li>
+                      <li><a class="dropdown-item text-primary" href="{% url 'tenue' %}">Tenues</a></li>
+                      <li><hr class="dropdown-divider text-primary"></li>
+                      <li><a class="dropdown-item text-primary" href="{% url 'modelle' %}">Models</a></li>
+                      <li><hr class="dropdown-divider text-primary"></li>
+                      <li><a class="dropdown-item text-primary" href="{% url 'ville' %}">Ville</a></li>
                     </ul>
                   </li>
 
 
                   <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       Gestion Commande
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-                      <li><a class="dropdown-item" href="{% url 'commande' %}">Commandes</a></li>
+                      <li><a class="dropdown-item text-primary" href="{% url 'commande' %}">Commandes</a></li>
                       <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="{% url 'livraison' %}">Livraison</a></li>
-                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item text-primary" href="{% url 'livraison' %}">Livraison</a></li>
                     </ul>
                   </li>
 
 
                   <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       Gestion Du Personnel
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-                      <li><a class="dropdown-item" href="{% url 'personnel' %}">Personnel</a></li>
+                      <li><a class="dropdown-item text-primary" href="{% url 'personnel' %}">Personnel</a></li>
                       <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="{% url 'post' %}">Posts</a></li>
+                      <li><a class="dropdown-item text-primary" href="{% url 'post' %}">Posts</a></li>
                     </ul>
                   </li>
   
@@ -88,8 +97,8 @@
                       <span class="text-white font-italic font-weight-bold">{{request.user}}</span>
                     </button>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item text-danger font-italic font-weight-bold" href="">changer son mot de passe</a></li>
-                      <li><a class="dropdown-item text-danger font-italic font-weight-bold" href="">logout</a></li>
+                      {% comment %} <li><a class="dropdown-item text-danger font-italic font-weight-bold" href="">changer son mot de passe</a></li>{% endcomment %}
+                      <li><a class="dropdown-item text-primary font-italic font-weight-bold" href="{% url 'logout_user' %}">logout</a></li> 
                     </ul>
                   </div>
                 </div>
@@ -168,6 +177,8 @@
 	  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jq-3.6.0/jszip-2.5.0/dt-1.12.1/b-2.2.3/b-html5-2.2.3/b-print-2.2.3/datatables.min.js"></script>
+
+
 
     <script>
       $(document).ready(function () {

@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Login</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href={% static "css/style.css" %}>
+        <link rel="shortcut icon" href="{% static "/images/app_img/favicon.ico" %}" type="image/x-icon">
+        <link rel="icon" href="{% static "/images/app_img/favicon.ico" %}" type="image/x-icon">
+   
+    </head>
+    <body>
+    <div class="contenair">
+        <div class="menu-gauche">
+            <h1>LIM'S CONNEXION</h1>
+        <form method = "POST" action="login_user" autocomplete="off">
+            {% csrf_token %}
+            <div class="input">
+                <input type="text" name="username" placeholder="username">
+                <input type="password" name="password" placeholder="password">
+            </div>
+            <div class="submit" id="submit">
+                <input type="submit" name="submit" value="Enter">
+            </div>
+        </form>
+        </div>
+    </div>
+
+    {% for message in messages %}
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        {% if message.tags == 'error' %}
+        <script>
+            var m = "{{ message }}";
+            swal("Denied !", "Please try again and enter corretly you username and you password.", "error")
+        </script>
+        {% elif message.tags == 'success' %}
+        <script>
+            var m = "{{ message }}";
+            swal("Perfect !", m, "success")
+        </script>
+        {% endif %}
+
+    {% endfor%}
+    </body>
+</html>

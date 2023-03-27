@@ -107,18 +107,3 @@ class CouturierForm(forms.ModelForm):
         fields = '__all__'
         
         
-        
-        
-class LivraisonForm(forms.ModelForm):
-    date_livaison = forms.DateField(
-        label='Date de livraison',
-        widget=forms.TextInput(attrs={'type': 'date'})
-    )
-    class Meta:
-        model = Livraison
-        fields = '__all__'
-        
-        widgets = {
-            'commande': forms.HiddenInput(),
-        }
-         

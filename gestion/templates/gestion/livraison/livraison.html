@@ -19,6 +19,7 @@
                 <th>Numero commande</th>
                 <th>Client</th>
                 <th>Date commande</th>
+                <th>Date livraison</th>
                 <th>Etat</th>
                 <th style="width: 18%;">Action</th>
             </tr>
@@ -29,16 +30,24 @@
                 <td>{{livraison.num_livraison}}</td>
                 <td>{{livraison.commande.client}}</td>
                 <td>{{livraison.commande.date_commande}}</td>
+                <td>{{livraison.date_livaison}}</td>
                 {% if livraison.status is False %}
                 <td class="text-danger font-weight-bold"><i style="font-size: 15px;" class="fa-solid fa-circle"></i> &nbsp;&nbsp;En cours</td>
+                {% else %}
+                <td class="text-success font-weight-bold"><i style="font-size: 15px;" class="fa-solid fa-circle"></i> &nbsp;&nbsp;Livrée</td>
                 {% endif %}
+                
                 <td>
+                    {% if livraison.status is True %}
                     <a href="{% url 'valide_livraison' livraison.id %}" type="button" class="btn btn-success" title="Valide Livraison">
                         <i class="fas fa-check text-white"></i>
                     </a>
-                    {% if livraison.status is True %}
-                    <a href="" type="button" class="btn btn-primary" title="Delete Client" target="_blank">
+                    <a href="{% url 'bon_livraison' livraison.id %}" type="button" class="btn btn-primary" title="Imprime bon de Livraison" target="_blank">
                         <i class="fas fa-print"></i>
+                    </a>
+                    {% else %}
+                    <a href="{% url 'valide_livraison' livraison.id %}" type="button" class="btn btn-danger" title="Valide Livraison">
+                        <i class="fas fa-check text-white"></i>
                     </a>
                     {% endif %}
                 </td>
