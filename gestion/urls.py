@@ -41,7 +41,7 @@ urlpatterns = [
     
     path('commande', views.commande, name='commande'),
     path('commande/add/', views.add_commande, name='add_commande'),
-    path('commande/edit/<int:commande_id>', views.edit_commande, name='edit_commande'),
+    path('commande/edit/<int:id>', views.edit_commande, name='edit_commande'),
     path('commande/delete/<int:id>', views.delete_commande, name='delete_commande'),
     path('commande/items/<int:id>', views.items_commande, name='items_commande'),
     

@@ -32,9 +32,13 @@
                 <td>{{client.ville}}</td>
                 <td>
                     {% if client.fileURL %}
-                    <a href ="{{client.fileURL}}" title="Lire le fichier" target="_blank">
+                    {% comment %} <a href ="{{client.fileURL}}" title="Lire le fichier" target="_blank">
                         <i style="font-size: 25px; color: green; text-decoration-style: none;" class="fa-solid fa-file-pdf"></i>
-                    </a>
+                    </a> {% endcomment %}
+                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#pdfModal{{client.id}}" title="lire le fichier">
+                        <i style="font-size: 25px; color: green; text-decoration-style: none;" class="fa-solid fa-file-pdf" frameborder="0" allowfullscreen></i>
+                    </button>
+                    {% include 'gestion/client/file.html' %}
                     {% endif %}
                 </td>
                 <td>
@@ -44,11 +48,12 @@
                     <a href="{% url 'delete_client' client.id %}" type="button" class="btn btn-danger" title="Delete Client">
                         <i class="fas fa-trash"></i>
                     </a>
-                    <a href="{% url 'print_client' client.id %}" type="button" class="btn btn-secondary" title="Delete Client" target="_blank">
+                    <a href="{% url 'print_client' client.id %}" type="button" class="btn btn-secondary" title="Impimer Client" target="_blank">
                         <i class="fas fa-print"></i>
                     </a>
                 </td>
             </tr>
+           
             {% endfor %}
         </tbody>
     </table>

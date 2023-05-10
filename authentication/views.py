@@ -30,15 +30,17 @@ def login_user(request):
         user = authenticate(username = username, password = password)
         if user != None:
             login(request, user)
+            messages.info(request, "Connexion reussie !")
             return redirect('statistique')
         else:
-            messages.error(request, "Please try again and enter corretly you username and you password")
+            messages.error(request, "Veuillez réssayer encore et saisir vos information de connexion: utilisateur et mot de passe correctement.")
             return HttpResponseRedirect('/')
 
 #Deconnxion
 def Logout_user(request):
     logout(request)
     request.user = None
+    messages.warning(request, "Deconnexion reussie !")
     return HttpResponseRedirect('/')
 
 # Page d'acceuil 

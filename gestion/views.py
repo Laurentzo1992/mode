@@ -9,6 +9,7 @@ from  django.views.decorators.cache import cache_control
 from datetime import date, datetime
 from django.db import transaction, models
 from django.db.models import Count, Sum
+from num2words import num2words
 
 
 ############################################################################
@@ -21,6 +22,7 @@ def statistique(request):
     ml = ModelTenue.objects.count()
     tn = Tenue.objects.count()
     cm = Command.objects.count()
+    montant_en_lettres = num2words(21, lang='fr')
 
     #recupérez les date selectionnées depuis le template
     date_depart = request.GET.get('date_depart')
@@ -43,7 +45,7 @@ def statistique(request):
     articles_commandes = Command.objects.all().count()
     # on selectionne et on compte le nombre de commande livré disponible dans la base
     articles_livres = Livraison.objects.filter(status=True).count()
-    context={"cl":cl, "ml":ml, "tn":tn, "cm":cm, "date_depart":date_depart, "date_arrive":date_arrive, "barres1":barres1, "etats1":etats1, "barres":barres, "etats":etats, "articles":articles, "articles_commandes":articles_commandes, "articles_livres":articles_livres}
+    context={"montant_en_lettres":montant_en_lettres, "cl":cl, "ml":ml, "tn":tn, "cm":cm, "date_depart":date_depart, "date_arrive":date_arrive, "barres1":barres1, "etats1":etats1, "barres":barres, "etats":etats, "articles":articles, "articles_commandes":articles_commandes, "articles_livres":articles_livres}
     # on reinitialise le filtre
     if 'reset' in request.GET:
         return redirect('statistique')
@@ -86,7 +88,7 @@ def edit_client(request, id):
             return redirect('client')
     else:
         form = ClientForm(instance=client)
-    return render(request, 'gestion/client/edit.html', {'form':form})
+    return render(request, 'gestion/client/edit.html', {'client':client, 'form':form})
 
 
 def delete_client(request, id):
@@ -364,7 +366,7 @@ def delete_personnel(request, id):
 
 
 def commande(request):
-    commandes=Command.objects.all()
+    commandes=Command.objects.all().order_by('-id')
     nbr_commande = commandes.count()
     context={"nbr_commande":nbr_commande, "commandes":commandes}
     return render(request, 'gestion/commande/commande.html', context)
@@ -433,67 +435,47 @@ def add_commande(request):
         return render(request, 'gestion/commande/add.html', context)
 
 
-def edit_commande(request, commande_id):
-    commande = Command.objects.get(pk=commande_id)
+   
+def edit_commande(request, id):
+    commande = get_object_or_404(Command, id=id)
     if request.method == 'POST':
+        # Récupérer les données du formulaire
         supplier_id = request.POST.get('client')
-        supplier = Client.objects.get(id=supplier_id)
+        supplier = Client.objects.get(pk=supplier_id)
         adresse_livraison = request.POST.get('adresse_livraison')
         date_commande = request.POST.get('date_commande')
         num_commande = request.POST.get('num_commande')
         couturier_id = request.POST.get('couturier')
-        couturier = Couturier.objects.get(id=couturier_id)
-        with transaction.atomic():
-            # Supprimer les anciennes lignes de commande
-            LigneCommande.objects.filter(commande=commande).delete()
-            selected_products = request.POST.getlist('articles')
-            number = 0
-            for article_id in selected_products:
-                number += 1
-                quantity = request.POST.get(f'quantity-{number}')
-                quantity = int(quantity)
-                article = Tenue.objects.get(id=article_id)
-                # Vérifiez si la quantité demandée est disponible
-                # if article.stock >= quantity:
-                #     article.stock = models.F('stock') - quantity
-                article.save()
+        couturier = Couturier.objects.get(pk=couturier_id)
+        selected_products = request.POST.getlist('articles')
 
-                LigneCommande.objects.create(commande=commande,
-                                                     article=article,
-                                                     quantite=quantity)
+        # Mettre à jour la commande
+        commande.client = supplier
+        commande.adresse_livraison = adresse_livraison
+        commande.date_commande = date_commande
+        commande.num_commande = num_commande
+        commande.couturier = couturier
+        commande.save()
 
-                # else:
-                        # Si la quantité n'est pas disponible, annulez la commande et affichez un message d'erreur
-                    # commande.delete()
-                    # messages.error(request, f"La quantité demandée pour '{article.name}' n'est pas disponible.")
+        # Mettre à jour les lignes de commande
+        LigneCommande.objects.filter(commande=commande).delete()
+        for article_id in selected_products:
+            quantity = request.POST.get(f'quantity-{article_id}')
+            article = Tenue.objects.get(id=article_id)
+            LigneCommande.objects.create(commande=commande,
+                                         article=article,
+                                         quantite=quantity)
 
-            # Mettre à jour les informations de la commande
-            commande.client = supplier
-            commande.adresse_livraison = adresse_livraison
-            commande.date_commande = date_commande
-            commande.num_commande = num_commande
-            commande.couturier = couturier
-            commande.save()
-
-            # Créer une nouvelle livraison pour la commande mise à jour
-            Livraison.objects.create(commande=commande,
-                                      num_livraison=commande.num_commande,
-                                      status=False,
-                                      )
-
-        messages.success(request, 'Votre commande a été modifiée avec succès!')
+        messages.success(request, 'La commande a été modifiée avec succès!')
         return redirect('commande')
-
     else:
         articles = Tenue.objects.all()
         suppliers = Client.objects.all()
         couturiers = Couturier.objects.all()
         commandes = LigneCommande.objects.filter(commande=commande)
-        context = {"commandes":commandes, 'articles': articles, "suppliers":suppliers, "couturiers":couturiers, "commande":commande}
+        context = {'commandes':commandes, 'commande': commande, 'articles': articles, 'suppliers': suppliers, 'couturiers': couturiers}
         return render(request, 'gestion/commande/edit.html', context)
 
-    
-  
 
 def delete_commande(request, id):
     com_id = Command.objects.get(id=id)

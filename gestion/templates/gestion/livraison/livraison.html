@@ -39,7 +39,7 @@
                 
                 <td>
                     {% if livraison.status is True %}
-                    <a href="{% url 'valide_livraison' livraison.id %}" type="button" class="btn btn-success" title="Valide Livraison">
+                    <a href="#" type="button" class="btn btn-success" title="Valide Livraison" disabled>
                         <i class="fas fa-check text-white"></i>
                     </a>
                     <a href="{% url 'bon_livraison' livraison.id %}" type="button" class="btn btn-primary" title="Imprime bon de Livraison" target="_blank">

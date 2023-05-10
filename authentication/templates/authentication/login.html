@@ -23,23 +23,29 @@
                 <input type="password" name="password" placeholder="password">
             </div>
             <div class="submit" id="submit">
-                <input type="submit" name="submit" value="Enter">
+                <input type="submit" name="submit" value="CONNEXION">
             </div>
         </form>
         </div>
     </div>
 
     {% for message in messages %}
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        {% comment %} <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> {% endcomment %}
+        <script src="{% static 'js/sweetalert.min.js' %}"></script>
         {% if message.tags == 'error' %}
         <script>
             var m = "{{ message }}";
-            swal("Denied !", "Please try again and enter corretly you username and you password.", "error")
+            swal("Réfusé!", m, "error")
         </script>
         {% elif message.tags == 'success' %}
         <script>
             var m = "{{ message }}";
-            swal("Perfect !", m, "success")
+            swal("Bienvenue!", m, "success")
+        </script>
+        {% elif message.tags == 'warning' %}
+        <script>
+            var m = "{{ message }}";
+            swal("A bientôt!", m, "warning")
         </script>
         {% endif %}
 

@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block title %} Home {% endblock %}
+
                 {% block main %} 
 					<main>
 						<div class="cards">
@@ -90,7 +93,7 @@
                     
                                         var ctx = document.getElementById('myChart').getContext('2d');
                                         var myChart = new Chart(ctx, {
-                                            type: 'pie',
+                                            type: 'polarArea',
                                             data: {
                                                 labels: [{% for etat in etats1 %}'{{etat.client__nom}} {{etat.client__prenom}}---{{etat.client__telephone}}', {% endfor %}],
                                                 datasets: [{
@@ -181,5 +184,26 @@
                         </div>
 					</main>
 
-					
+		{% for message in messages %}
+        {% comment %} <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> {% endcomment %}
+        <script src="{% static 'js/sweetalert.min.js' %}"></script>
+       
+        {% if message.tags == 'error' %}
+        <script>
+            var m = "{{ message }}";
+            swal("Réfusé!", m, "error")
+        </script>
+        {% elif message.tags == 'info' %}
+        <script>
+            var m = "{{ message }}";
+            swal("Bienvenue!", m, "info")
+        </script>
+        {% elif message.tags == 'warning' %}
+        <script>
+            var m = "{{ message }}";
+            swal("A bientôt!", m, "warning")
+        </script>
+        {% endif %}
+
+    {% endfor%}
 				{% endblock main %}
